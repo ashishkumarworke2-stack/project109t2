@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project109T Terminal</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap');
+
+    body {
+      margin: 0;
+      background: #000;
+      color: #00ff9c;
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      cursor: default;
+      animation: fadeInBody 1.2s ease;
+    }
+
+    @keyframes fadeInBody {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .terminal {
+      width: 90%;
+      max-width: 800px;
+      background: #0a0a0a;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,255,156,0.2);
+      padding: 20px;
+      animation: floatIn 0.8s ease, pulseGlow 4s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 20px rgba(0,255,156,0.2); }
+      50% { box-shadow: 0 0 35px rgba(0,255,156,0.35); }
+    }
+
+    @keyframes floatIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .terminal-header {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      box-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+      animation: glow 1.5s infinite ease-in-out;
+    }
+
+    .red { background: #ff5f56; color: #ff5f56; animation-delay: 0s; }
+    .yellow { background: #ffbd2e; color: #ffbd2e; animation-delay: 0.3s; }
+    .green { background: #27c93f; color: #27c93f; animation-delay: 0.6s; }
+
+    .line {
+      margin: 6px 0;
+      animation: fadeLine 0.5s ease, flicker 3s infinite;
+    }
+
+    @keyframes fadeLine {
+      from { opacity: 0; transform: translateX(-5px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .prompt::before {
+      content: "> ";
+      color: #00ff9c;
+    }
+
+    .highlight {
+      color: #ffffff;
+      text-shadow: 0 0 6px #00ff9c;
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 18px;
+      border: 1px solid #00ff9c;
+      color: #00ff9c;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all 0.25s ease;
+    }
+
+    .button:hover {
+      background: #00ff9c;
+      color: #000;
+      box-shadow: 0 0 10px #00ff9c, 0 0 20px #00ff9c;
+      transform: translateY(-2px);
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      background: #00ff9c;
+      margin-left: 5px;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 50%, 100% { opacity: 1; }
+      25%, 75% { opacity: 0; }
+    }
+
+    @keyframes glow {
+      0%, 100% {
+        box-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 15px currentColor, 0 0 25px currentColor;
+        transform: scale(1.2);
+      }
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      48% { opacity: 0.95; }
+      50% { opacity: 0.85; }
+      52% { opacity: 0.95; }
+    }
+      50% {
+        box-shadow: 0 0 15px currentColor, 0 0 25px currentColor;
+        transform: scale(1.2);
+      }
+    }
+
+    .logo {
+      animation: logoGlow 2s infinite ease-in-out;
+      text-shadow: 0 0 2px #00ff9c, 0 0 5px #00ff9c;
+    }
+
+    @keyframes logoGlow {
+      0%, 100% {
+        text-shadow: 0 0 2px #00ff9c, 0 0 5px #00ff9c;
+        opacity: 0.85;
+      }
+      50% {
+        text-shadow: 0 0 8px #00ff9c, 0 0 15px #00ff9c;
+        opacity: 1;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="terminal">
+    <div class="terminal-header">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+    </div>
+
+<pre class="logo" style="color:#00ff9c; text-align:center; font-size:14px;">
+██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗
+██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝
+██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║   
+██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║   
+██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║   
+╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝   
+                                                     109t
+
+                project<span style="color:#00ff9c; text-shadow:0 0 10px #00ff9c;">109</span>t.fun
+</pre>
+
+<pre style="color:#00ff9c; text-align:left;">
+╔══════════════════════════════════════╗
+║          PROJECT <span style="color:#00ff9c; text-shadow:0 0 8px #00ff9c;">109</span>T            ║
+╠══════════════════════════════════════╣
+║   ░ SYSTEM: DAILY TOKEN RELEASE      ║
+║   ░ MAX SUPPLY: 109                  ║
+╚══════════════════════════════════════╝
+</pre>
+
+    <div class="line prompt">Initializing Project109t...</div>
+
+    <div class="line prompt">
+      Total Released: <span class="highlight" id="supply">1 / 109 tokens</span>
+    </div>
+
+    <div class="line prompt" id="clock">Time: --:--:--</div>
+    <div class="line prompt" id="counter">Day 1 / 109</div>
+
+    <div class="line prompt">Status: ACTIVE</div>
+
+    <!-- ADMIN MESSAGE PANEL -->
+    <div style="margin-top:12px; padding:10px; border:1px solid #00ff9c; border-radius:6px; background:#050505;">
+      <div style="font-size:12px; opacity:0.7; margin-bottom:6px;">ADMIN MESSAGE</div>
+      <div id="adminMessage" style="font-size:13px; line-height:1.4;">
+        Welcome to Project109T.<br>Glad to have all new holders onboard.<br>Daily supply is growing — stay early.<br>More updates coming soon.
+      </div>
+    </div>
+
+    <a href="https://project109t.fun" target="_blank" rel="noopener noreferrer" class="button">[ Buy on Pump.fun ]</a>
+    <a href="#" id="connectWallet" class="button">[ Connect Wallet ]</a>
+
+    <!-- SOCIAL LINKS -->
+    <div style="margin-top:12px; display:flex; flex-wrap:wrap; gap:8px;">
+      <a href="https://discord.com" target="_blank" class="button">[ Discord ]</a>
+      <a href="http://telegram.org/" target="_blank" class="button">[ Telegram ]</a>
+      <a href="http://x.com/" target="_blank" class="button">[ X ]</a>
+      <a href="https://dexscreener.com" target="_blank" class="button">[ Dex Screener ]</a>
+    </div>
+
+    <!-- PROJECT SUMMARY -->
+    <div style="margin-top:12px; font-size:12px; opacity:0.85; line-height:1.6;">
+      Project109T is a limited 109-day token experiment designed around time, scarcity, and patience.<br><br>
+      Every 24 hours, exactly one new token is unlocked — no pre-minting, no shortcuts, and no resets. The system moves forward only, creating a clear timeline from D1 to D109.<br><br>
+      Early participants naturally hold the rarest positions, while later entries reflect the progression of the system over time. This creates a simple but powerful structure driven entirely by time.<br><br>
+      There are no complex mechanics — just a transparent release schedule, a fixed maximum supply, and a shared experience as each new day unlocks.
+    </div>
+
+    <div class="line prompt">Joining 109 Club...<span class="cursor"></span></div>
+  </div>
+
+<script>
+  let startDate;
+  let lastReleaseDay = null;
+
+  if (localStorage.getItem("project109_start")) {
+    startDate = new Date(localStorage.getItem("project109_start"));
+  } else {
+    startDate = new Date();
+    localStorage.setItem("project109_start", startDate.toISOString());
+  }
+
+  function updateAll() {
+    let now = new Date();
+    let diffTime = now - startDate;
+    let diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+    if (diffDays < 1) diffDays = 1;
+    if (diffDays > 109) diffDays = 109;
+
+    document.getElementById("counter").innerText = `Day ${diffDays} / 109`;
+    document.getElementById("supply").innerText = `${diffDays} / 109 tokens`;
+
+    let nextRelease = new Date(startDate);
+    nextRelease.setDate(startDate.getDate() + diffDays);
+
+    let remaining = nextRelease - now;
+    if (remaining < 0) remaining = 0;
+
+    const hours = String(Math.floor(remaining / (1000 * 60 * 60))).padStart(2, '0');
+    const minutes = String(Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+    const seconds = String(Math.floor((remaining % (1000 * 60)) / 1000)).padStart(2, '0');
+
+    document.getElementById("clock").innerText = `Next Token In: ${hours}:${minutes}:${seconds}`;
+
+    if (lastReleaseDay === null) {
+      lastReleaseDay = diffDays;
+    }
+  }
+
+  setInterval(updateAll, 1000);
+  updateAll();
+</script>
+
+</body>
+</html>
