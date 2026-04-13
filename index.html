@@ -150,12 +150,6 @@
       }
     }
 
-    /* removed heavy flicker to prevent page glitching */
-      48% { opacity: 0.95; }
-      50% { opacity: 0.85; }
-      52% { opacity: 0.95; }
-    }
-
     .logo {
       animation: logoGlow 2s infinite ease-in-out;
       text-shadow: 0 0 2px #ffffff, 0 0 5px #ffffff;
@@ -174,10 +168,209 @@
 
   
 #supply { color: #ffffff !important; }
+
+/* Terminal pulse border on hover */
+.terminal {
+  transition: box-shadow 0.4s ease;
+}
+.terminal:hover {
+  box-shadow:
+    0 0 15px rgba(255,255,255,0.3),
+    0 0 35px rgba(255,255,255,0.35),
+    0 0 70px rgba(255,255,255,0.3),
+    0 0 120px rgba(255,255,255,0.2);
+}
+
+/* Wrap terminal in z-index */
+.terminal { position: relative; z-index: 2; }
+
+/* Corner brackets animation */
+.corner-bracket {
+  position: absolute;
+  width: 18px; height: 18px;
+  pointer-events: none;
+  animation: bracketPulse 3s ease-in-out infinite;
+  opacity: 0.6;
+}
+.corner-bracket.tl { top: 6px; left: 6px; border-top: 1px solid #fff; border-left: 1px solid #fff; }
+.corner-bracket.tr { top: 6px; right: 6px; border-top: 1px solid #fff; border-right: 1px solid #fff; animation-delay: 0.75s; }
+.corner-bracket.bl { bottom: 6px; left: 6px; border-bottom: 1px solid #fff; border-left: 1px solid #fff; animation-delay: 1.5s; }
+.corner-bracket.br { bottom: 6px; right: 6px; border-bottom: 1px solid #fff; border-right: 1px solid #fff; animation-delay: 2.25s; }
+@keyframes bracketPulse {
+  0%,100% { opacity: 0.4; }
+  50%      { opacity: 1; }
+}
+
+/* Data stream ticker across the top of terminal */
+.data-ticker {
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 10px;
+  opacity: 0.4;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 6px;
+}
+.data-ticker-inner {
+  display: inline-block;
+  animation: tickerScroll 22s linear infinite;
+}
+@keyframes tickerScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Toast notification styles */
+.toast-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #000000;
+  border: 1px solid #ffffff;
+  border-radius: 8px;
+  padding: 12px 18px;
+  min-width: 240px;
+  max-width: 320px;
+  z-index: 1000;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(255,255,255,0.2), 0 0 5px rgba(255,255,255,0.1);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.toast-notification.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.toast-notification .toast-title {
+  font-weight: bold;
+  margin-bottom: 6px;
+  font-size: 12px;
+  opacity: 0.7;
+  letter-spacing: 1px;
+}
+
+.toast-notification .toast-message {
+  line-height: 1.4;
+}
+
+.toast-notification .toast-time {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 6px;
+  color: #ffffff;
+  text-shadow: 0 0 4px #ffffff;
+}
+
+.toast-notification .toast-close {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.5;
+  pointer-events: auto;
+}
+.toast-notification .toast-close:hover {
+  opacity: 1;
+}
+
+/* ===== NEW SUBTLE ANIMATIONS (added without changing original design) ===== */
+
+/* 1. Status pulse - gentle glow */
+.status-pulse {
+  animation: statusGlow 3s infinite ease-in-out;
+  display: inline-block;
+}
+@keyframes statusGlow {
+  0%, 100% { opacity: 0.9; text-shadow: 0 0 0px #ffffff; }
+  50% { opacity: 1; text-shadow: 0 0 3px rgba(255,255,255,0.4); }
+}
+
+/* 2. Supply update animation (only on change) */
+.supply-update {
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+.supply-update.bounce {
+  animation: supplyGlow 0.3s ease-out;
+}
+@keyframes supplyGlow {
+  0% { transform: scale(1); text-shadow: 0 0 0px #ffffff; }
+  40% { transform: scale(1.05); text-shadow: 0 0 10px #ffffff; }
+  100% { transform: scale(1); text-shadow: 0 0 0px #ffffff; }
+}
+
+/* 3. Clock numbers soft pulse */
+.clock-pulse {
+  animation: clockSoftPulse 2s infinite alternate;
+}
+@keyframes clockSoftPulse {
+  0% { text-shadow: 0 0 0px rgba(255,255,255,0); }
+  100% { text-shadow: 0 0 2px rgba(255,255,255,0.5); }
+}
+
+/* 4. Roadmap items staggered fade-in */
+.roadmap-item {
+  opacity: 0;
+  transform: translateX(-5px);
+  animation: roadmapReveal 0.5s ease forwards;
+}
+.roadmap-item:nth-child(1) { animation-delay: 0.1s; }
+.roadmap-item:nth-child(2) { animation-delay: 0.2s; }
+.roadmap-item:nth-child(3) { animation-delay: 0.3s; }
+.roadmap-item:nth-child(4) { animation-delay: 0.4s; }
+.roadmap-item:nth-child(5) { animation-delay: 0.5s; }
+.roadmap-item:nth-child(6) { animation-delay: 0.6s; }
+@keyframes roadmapReveal {
+  0% { opacity: 0; transform: translateX(-5px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* 5. Admin message box hover glow */
+.admin-glow {
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.admin-glow:hover {
+  box-shadow: 0 0 12px rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.4);
+}
+
+/* 6. Joining line neon flicker (very subtle) */
+.join-neon {
+  display: inline-block;
+  animation: neonFlicker 4s infinite;
+}
+@keyframes neonFlicker {
+  0%, 100% { opacity: 0.95; text-shadow: 0 0 0px #ffffff; }
+  50% { opacity: 1; text-shadow: 0 0 2px rgba(255,255,255,0.3); }
+}
 </style>
 </head>
 <body>
+
   <div class="terminal">
+
+    <!-- Corner brackets -->
+    <div class="corner-bracket tl"></div>
+    <div class="corner-bracket tr"></div>
+    <div class="corner-bracket bl"></div>
+    <div class="corner-bracket br"></div>
+
+    <!-- Data stream ticker -->
+    <div class="data-ticker">
+      <span class="data-ticker-inner">
+        SYS::ONLINE &nbsp;|&nbsp; TOKEN_RELEASE: ACTIVE &nbsp;|&nbsp; SUPPLY: LOCKED &nbsp;|&nbsp; SCARCITY_INDEX: RISING &nbsp;|&nbsp; CHAIN: SOLANA &nbsp;|&nbsp; PROTOCOL: D1→D109 &nbsp;|&nbsp; NODE: CONNECTED &nbsp;|&nbsp; PATIENCE: REQUIRED &nbsp;|&nbsp;
+        SYS::ONLINE &nbsp;|&nbsp; TOKEN_RELEASE: ACTIVE &nbsp;|&nbsp; SUPPLY: LOCKED &nbsp;|&nbsp; SCARCITY_INDEX: RISING &nbsp;|&nbsp; CHAIN: SOLANA &nbsp;|&nbsp; PROTOCOL: D1→D109 &nbsp;|&nbsp; NODE: CONNECTED &nbsp;|&nbsp; PATIENCE: REQUIRED &nbsp;|&nbsp;
+      </span>
+    </div>
+
     <div class="terminal-header">
       <div class="dot red"></div>
       <div class="dot yellow"></div>
@@ -208,15 +401,17 @@
     <div class="line prompt" id="init"></div>
 
     <div class="line prompt">
-      Total Released: <span class="highlight" id="supply">1 / 109 tokens</span>
+      Total Released: <span class="highlight supply-update" id="supply">1 / 109 tokens</span>
     </div>
 
-    <div class="line prompt" id="clock">Time: --:--:--</div>
+    <!-- Main clock: now shows time until next token release -->
+    <div class="line prompt clock-pulse" id="clock">Next Token In: --:--:--</div>
+
     <div class="line prompt" id="counter">Day 1 / 109</div>
 
-    <div class="line prompt">Status: ACTIVE</div>
+    <div class="line prompt"><span class="status-pulse">Status: ACTIVE</span></div>
 
-    <div style="margin-top:12px; padding:10px; border:1px solid #ffffff; border-radius:6px; background:#000000;">
+    <div style="margin-top:12px; padding:10px; border:1px solid #ffffff; border-radius:6px; background:#000000;" class="admin-glow">
       <div style="font-size:12px; opacity:0.7; margin-bottom:6px;">ADMIN MESSAGE</div>
       <div id="adminMessage" style="font-size:13px; line-height:1.4; position:relative; overflow:hidden; min-height:72px;">
         <div id="adminInner" style="transition: opacity 0.6s ease, transform 0.6s ease;">
@@ -248,21 +443,27 @@
     <div style="margin-top:12px; padding:10px; border:1px solid #ffffff; border-radius:6px; background:#000000;">
       <div style="font-size:12px; opacity:0.7; margin-bottom:6px;">ROADMAP</div>
       <div style="font-size:13px; line-height:1.6;">
-        ░ Day 1–10: Initial launch phase — early holders enter<br>
-        ░ Day 11–30: Awareness growth — community forming<br>
-        ░ Day 31–60: Mid-cycle — scarcity becomes visible<br>
-        ░ Day 61–90: Late phase — positions become rare<br>
-        ░ Day 91–109: Final stretch — maximum scarcity reached<br>
-        ░ Day 109: Completion — full supply unlocked
+        <div class="roadmap-item">░ Day 1–10: Initial launch phase — early holders enter</div>
+        <div class="roadmap-item">░ Day 11–30: Awareness growth — community forming</div>
+        <div class="roadmap-item">░ Day 31–60: Mid-cycle — scarcity becomes visible</div>
+        <div class="roadmap-item">░ Day 61–90: Late phase — positions become rare</div>
+        <div class="roadmap-item">░ Day 91–109: Final stretch — maximum scarcity reached</div>
+        <div class="roadmap-item">░ Day 109: Completion — full supply unlocked</div>
       </div>
     </div>
 
-    <div class="line prompt">Joining 109 Club...<span class="cursor"></span></div>
+    <div class="line prompt">
+      <span class="join-neon">Joining 109 Club...</span><span class="cursor"></span>
+    </div>
   </div>
 
-<script>
-  let startDate;
+  <div id="toastContainer"></div>
 
+<script>
+  // ========================
+  // ORIGINAL TOKEN LOGIC (unchanged)
+  // ========================
+  let startDate;
   if (localStorage.getItem("project109_start")) {
     startDate = new Date(localStorage.getItem("project109_start"));
   } else {
@@ -270,33 +471,55 @@
     localStorage.setItem("project109_start", startDate.toISOString());
   }
 
-  function updateAll() {
+  function updateTokenRelease() {
     let now = new Date();
     let diffTime = now - startDate;
     let diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-
     if (diffDays < 1) diffDays = 1;
     if (diffDays > 109) diffDays = 109;
-
     document.getElementById("counter").innerText = `Day ${diffDays} / 109`;
-    document.getElementById("supply").innerText = `${diffDays} / 109 tokens`;
+    
+    const supplySpan = document.getElementById("supply");
+    const newSupplyText = `${diffDays} / 109 tokens`;
+    if (supplySpan.innerText !== newSupplyText) {
+      supplySpan.classList.add('bounce');
+      setTimeout(() => supplySpan.classList.remove('bounce'), 300);
+    }
+    supplySpan.innerText = newSupplyText;
+  }
+  updateTokenRelease();
+  setInterval(updateTokenRelease, 60000);
 
-    let nextRelease = new Date(startDate);
+  // ========================
+  // TOKEN RELEASE TIME LEFT (for main clock and notifications)
+  // ========================
+  function getTokenReleaseTimeLeft() {
+    const now = new Date();
+    const diffTime = now - startDate;
+    let diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    if (diffDays < 1) diffDays = 1;
+    if (diffDays > 109) diffDays = 109;
+    const nextRelease = new Date(startDate);
     nextRelease.setDate(startDate.getDate() + diffDays);
-
     let remaining = nextRelease - now;
     if (remaining < 0) remaining = 0;
-
-    const h = String(Math.floor(remaining / 3600000)).padStart(2, '0');
-    const m = String(Math.floor((remaining % 3600000) / 60000)).padStart(2, '0');
-    const s = String(Math.floor((remaining % 60000) / 1000)).padStart(2, '0');
-
-    document.getElementById("clock").innerText = `Next Token In: ${h}:${m}:${s}`;
+    const totalSeconds = Math.floor(remaining / 1000);
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   }
 
-  setInterval(updateAll, 1000);
-  updateAll();
+  function updateMainClock() {
+    const timeLeft = getTokenReleaseTimeLeft();
+    document.getElementById("clock").innerText = `Next Token In: ${timeLeft}`;
+  }
+  updateMainClock();
+  setInterval(updateMainClock, 1000);
 
+  // ========================
+  // ORIGINAL TYPING & ADMIN MESSAGES (unchanged)
+  // ========================
   function typeLine(el, text, speed = 30) {
     el.innerHTML = "";
     let i = 0;
@@ -309,7 +532,6 @@
     }
     t();
   }
-
   typeLine(document.getElementById("init"), "Initializing Project109T...");
 
   const messages = [
@@ -318,31 +540,25 @@
     "109 tokens only.<br>Scarcity matters.",
     "Patience = Position.<br>Position = Power."
   ];
-
   let idx = 0;
   setInterval(() => {
     idx = (idx + 1) % messages.length;
     const el = document.getElementById("adminInner");
-
-    // fade out + slight slide
     el.style.opacity = 0;
     el.style.transform = "translateY(6px)";
-
     setTimeout(() => {
       el.innerHTML = messages[idx];
-
-      // reset position instantly
       el.style.transform = "translateY(-6px)";
-
       requestAnimationFrame(() => {
-        // fade in + settle
         el.style.opacity = 1;
         el.style.transform = "translateY(0)";
       });
     }, 300);
-
   }, 8000);
 
+  // ========================
+  // WALLET CONNECT (unchanged)
+  // ========================
   document.getElementById("connectWallet").onclick = async () => {
     if (window.solana && window.solana.isPhantom) {
       const res = await window.solana.connect();
@@ -352,6 +568,67 @@
     }
   };
 
+  // ========================
+  // TOAST & BROWSER NOTIFICATIONS (unchanged)
+  // ========================
+  let browserNotificationPermission = false;
+  function requestNotificationPermission() {
+    if ('Notification' in window) {
+      if (Notification.permission === 'default') {
+        Notification.requestPermission().then(perm => {
+          browserNotificationPermission = (perm === 'granted');
+        });
+      } else if (Notification.permission === 'granted') {
+        browserNotificationPermission = true;
+      }
+    }
+  }
+  function sendBrowserNotification(title, body) {
+    if (browserNotificationPermission && 'Notification' in window && Notification.permission === 'granted') {
+      new Notification(title, { body: body });
+    }
+  }
+  function showToast(message, timeStr) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.innerHTML = `
+      <div class="toast-title">🔔 PROJECT109T ALERT</div>
+      <div class="toast-message">${message}</div>
+      <div class="toast-time">⏱️ ${timeStr}</div>
+      <div class="toast-close">✕</div>
+    `;
+    container.appendChild(toast);
+    const closeBtn = toast.querySelector('.toast-close');
+    closeBtn.addEventListener('click', () => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    });
+    setTimeout(() => toast.classList.add('show'), 10);
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }
+    }, 8000);
+  }
+  function schedulePeriodicNotification() {
+    const interval = Math.floor(Math.random() * (300000 - 180000 + 1) + 180000);
+    setTimeout(() => {
+      const timeLeft = getTokenReleaseTimeLeft();
+      showToast(`Next token releases in:`, timeLeft);
+      sendBrowserNotification('Project109T Token Alert', `Next token in: ${timeLeft}`);
+      schedulePeriodicNotification();
+    }, interval);
+  }
+  window.addEventListener('load', () => {
+    requestNotificationPermission();
+    setTimeout(() => {
+      const timeLeft = getTokenReleaseTimeLeft();
+      showToast(`Next token releases in:`, timeLeft);
+    }, 2000);
+    schedulePeriodicNotification();
+  });
 </script>
 
 </body>
