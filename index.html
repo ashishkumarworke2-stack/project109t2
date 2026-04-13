@@ -10,8 +10,8 @@
 
     body {
       margin: 0;
-      background: #000;
-      color: #00ff9c;
+      background: #000000;
+      color: #ffffff;
       font-family: 'JetBrains Mono', monospace;
       display: flex;
       justify-content: center;
@@ -34,27 +34,35 @@
       pointer-events: none;
       background: repeating-linear-gradient(
         to bottom,
-        rgba(0,255,156,0.02),
-        rgba(0,255,156,0.02) 1px,
+        rgba(0,0,0,0.02),
+        rgba(0,0,0,0.02) 1px,
         transparent 1px,
         transparent 3px
       );
     }
 
-    .terminal {
-      width: 90%;
-      max-width: 800px;
-      background: #0a0a0a;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,255,156,0.2);
-      padding: 20px;
-      animation: floatIn 0.8s ease, pulseGlow 6s infinite ease-in-out;
-      will-change: transform, box-shadow;
-    }
+    
+.terminal {
+  width: 90%;
+  max-width: 800px;
+  background: #000000;
+  border-radius: 10px;
+  padding: 20px;
+  position: relative;
+
+  box-shadow:
+    0 0 10px rgba(255,255,255,0.15),
+    0 0 20px rgba(255,255,255,0.2),
+    0 0 40px rgba(255,255,255,0.25),
+    0 0 80px rgba(255,255,255,0.15);
+
+  animation: floatIn 0.8s ease, terminalGlow 4s infinite ease-in-out;
+}
+
 
     @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 20px rgba(0,255,156,0.2); }
-      50% { box-shadow: 0 0 35px rgba(0,255,156,0.35); }
+      0%, 100% { box-shadow: 0 0 20px rgba(0,0,0,0.2); }
+      50% { box-shadow: 0 0 35px rgba(0,0,0,0.35); }
     }
 
     @keyframes floatIn {
@@ -92,36 +100,36 @@
 
     .prompt::before {
       content: "> ";
-      color: #00ff9c;
+      color: #ffffff;
     }
 
     .highlight {
-      color: #ffffff;
-      text-shadow: 0 0 6px #00ff9c;
+      color: #000000;
+      text-shadow: 0 0 6px #ffffff;
     }
 
     .button {
       display: inline-block;
       margin-top: 15px;
       padding: 10px 18px;
-      border: 1px solid #00ff9c;
-      color: #00ff9c;
+      border: 1px solid #ffffff;
+      color: #ffffff;
       text-decoration: none;
       border-radius: 6px;
       transition: all 0.25s ease;
     }
 
     .button:hover {
-      background: #00ff9c;
-      color: #000;
-      box-shadow: 0 0 10px #00ff9c, 0 0 20px #00ff9c;
+      background: #ffffff;
+      color: #000000;
+      box-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff;
       transform: translateY(-2px);
     }
 
     .cursor {
       display: inline-block;
       width: 10px;
-      background: #00ff9c;
+      background: #ffffff;
       margin-left: 5px;
       animation: blink 1s infinite;
     }
@@ -150,21 +158,23 @@
 
     .logo {
       animation: logoGlow 2s infinite ease-in-out;
-      text-shadow: 0 0 2px #00ff9c, 0 0 5px #00ff9c;
+      text-shadow: 0 0 2px #ffffff, 0 0 5px #ffffff;
     }
 
     @keyframes logoGlow {
       0%, 100% {
-        text-shadow: 0 0 2px #00ff9c, 0 0 5px #00ff9c;
+        text-shadow: 0 0 2px #ffffff, 0 0 5px #ffffff;
         opacity: 0.85;
       }
       50% {
-        text-shadow: 0 0 8px #00ff9c, 0 0 15px #00ff9c;
+        text-shadow: 0 0 8px #ffffff, 0 0 15px #ffffff;
         opacity: 1;
       }
     }
 
-  </style>
+  
+#supply { color: #ffffff !important; }
+</style>
 </head>
 <body>
   <div class="terminal">
@@ -174,7 +184,7 @@
       <div class="dot green"></div>
     </div>
 
-<pre class="logo" style="color:#00ff9c; text-align:center; font-size:14px;">
+<pre class="logo" style="color:#ffffff; text-align:center; font-size:14px;">
 ██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗
 ██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝
 ██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║   
@@ -183,12 +193,12 @@
 ╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝   
                                                      109t
 
-                project<span style="color:#00ff9c; text-shadow:0 0 10px #00ff9c;">109</span>t.fun
+                project<span style="color:#ffffff; text-shadow:0 0 10px #ffffff;">109</span>t.fun
 </pre>
 
-<pre style="color:#00ff9c; text-align:left;">
+<pre style="color:#ffffff; text-align:left;">
 ╔══════════════════════════════════════╗
-║          PROJECT <span style="color:#00ff9c; text-shadow:0 0 8px #00ff9c;">109</span>T            ║
+║          PROJECT <span style="color:#ffffff; text-shadow:0 0 8px #ffffff;">109</span>T            ║
 ╠══════════════════════════════════════╣
 ║   ░ SYSTEM: DAILY TOKEN RELEASE      ║
 ║   ░ MAX SUPPLY: 109                  ║
@@ -206,7 +216,7 @@
 
     <div class="line prompt">Status: ACTIVE</div>
 
-    <div style="margin-top:12px; padding:10px; border:1px solid #00ff9c; border-radius:6px; background:#050505;">
+    <div style="margin-top:12px; padding:10px; border:1px solid #ffffff; border-radius:6px; background:#000000;">
       <div style="font-size:12px; opacity:0.7; margin-bottom:6px;">ADMIN MESSAGE</div>
       <div id="adminMessage" style="font-size:13px; line-height:1.4; position:relative; overflow:hidden; min-height:72px;">
         <div id="adminInner" style="transition: opacity 0.6s ease, transform 0.6s ease;">
@@ -235,7 +245,7 @@
       There are no complex mechanics — just a transparent release schedule, a fixed maximum supply, and a shared experience as each new day unlocks.
     </div>
 
-    <div style="margin-top:12px; padding:10px; border:1px solid #00ff9c; border-radius:6px; background:#050505;">
+    <div style="margin-top:12px; padding:10px; border:1px solid #ffffff; border-radius:6px; background:#000000;">
       <div style="font-size:12px; opacity:0.7; margin-bottom:6px;">ROADMAP</div>
       <div style="font-size:13px; line-height:1.6;">
         ░ Day 1–10: Initial launch phase — early holders enter<br>
