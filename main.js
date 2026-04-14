@@ -1,0 +1,1 @@
+const GLOBAL_LAUNCH_DATE = new Date('2026-04-22T00:00:00Z');
