@@ -8,6 +8,11 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap');
 
+    /* ----- CUSTOM CURSOR (TERMINAL BLOCK) ----- */
+    * {
+      cursor: none !important;
+    }
+
     body {
       margin: 0;
       background: #000000;
@@ -17,13 +22,29 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      cursor: default;
       animation: fadeInBody 1.2s ease;
+      position: relative;
     }
 
-    @keyframes fadeInBody {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    /* Custom cursor element */
+    #customCursor {
+      position: fixed;
+      width: 12px;
+      height: 22px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 0 8px #ffffff, 0 0 15px rgba(255,255,255,0.5);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-2px, -2px);
+      transition: width 0.1s, height 0.1s, background 0.1s;
+      mix-blend-mode: difference;
+      border-radius: 2px;
+      animation: cursorPulse 1.5s infinite;
+    }
+
+    @keyframes cursorPulse {
+      0%, 100% { opacity: 0.9; box-shadow: 0 0 5px #fff, 0 0 10px #fff; }
+      50% { opacity: 1; box-shadow: 0 0 12px #fff, 0 0 20px #fff; }
     }
 
     body::after {
@@ -41,6 +62,36 @@
       );
     }
 
+    /* Scanline overlay */
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 100;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0.1) 0px,
+        rgba(255,255,255,0.02) 1px,
+        transparent 2px,
+        transparent 4px
+      );
+      opacity: 0.3;
+      animation: scanMove 8s linear infinite;
+    }
+
+    @keyframes scanMove {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 10px; }
+    }
+
+    @keyframes fadeInBody {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
     .terminal {
       width: 90%;
       max-width: 800px;
@@ -53,13 +104,19 @@
         0 0 20px rgba(255,255,255,0.2),
         0 0 40px rgba(255,255,255,0.25),
         0 0 80px rgba(255,255,255,0.15);
-      animation: floatIn 0.8s ease, terminalGlow 4s infinite ease-in-out;
-      transition: box-shadow 0.4s ease;
+      animation: floatIn 0.8s ease;
+      transition: box-shadow 0.4s ease, border-color 0.3s;
+      border: 1px solid rgba(255,255,255,0.1);
+      z-index: 2;
     }
 
-    @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 20px rgba(0,0,0,0.2); }
-      50% { box-shadow: 0 0 35px rgba(0,0,0,0.35); }
+    .terminal:hover {
+      box-shadow:
+        0 0 20px rgba(255,255,255,0.4),
+        0 0 45px rgba(255,255,255,0.35),
+        0 0 90px rgba(255,255,255,0.3),
+        0 0 140px rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.3);
     }
 
     @keyframes floatIn {
@@ -114,6 +171,7 @@
       text-decoration: none;
       border-radius: 6px;
       transition: all 0.25s ease;
+      cursor: none;
     }
 
     .button:hover {
@@ -123,17 +181,21 @@
       transform: translateY(-2px);
     }
 
+    /* Enhanced blinking cursor */
     .cursor {
       display: inline-block;
-      width: 10px;
+      width: 12px;
+      height: 20px;
       background: #ffffff;
       margin-left: 5px;
-      animation: blink 1s infinite;
+      box-shadow: 0 0 8px #ffffff, 0 0 15px #ffffff;
+      animation: blinkCursor 1.2s infinite, cursorPulse 1.5s infinite;
+      vertical-align: middle;
     }
 
-    @keyframes blink {
-      0%, 50%, 100% { opacity: 1; }
-      25%, 75% { opacity: 0; }
+    @keyframes blinkCursor {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
     }
 
     @keyframes glow {
@@ -164,16 +226,6 @@
     }
 
     #supply { color: #ffffff !important; }
-
-    .terminal:hover {
-      box-shadow:
-        0 0 15px rgba(255,255,255,0.3),
-        0 0 35px rgba(255,255,255,0.35),
-        0 0 70px rgba(255,255,255,0.3),
-        0 0 120px rgba(255,255,255,0.2);
-    }
-
-    .terminal { position: relative; z-index: 2; }
 
     .corner-bracket {
       position: absolute;
@@ -261,7 +313,7 @@
       position: absolute;
       top: 6px;
       right: 10px;
-      cursor: pointer;
+      cursor: none;
       font-size: 14px;
       opacity: 0.5;
       pointer-events: auto;
@@ -304,6 +356,11 @@
       opacity: 0;
       transform: translateX(-5px);
       animation: roadmapReveal 0.5s ease forwards;
+      transition: all 0.2s;
+    }
+    .roadmap-item:hover {
+      text-shadow: 0 0 5px #fff;
+      transform: translateX(2px);
     }
     .roadmap-item:nth-child(1) { animation-delay: 0.1s; }
     .roadmap-item:nth-child(2) { animation-delay: 0.2s; }
@@ -322,6 +379,18 @@
     .admin-glow:hover {
       box-shadow: 0 0 12px rgba(255,255,255,0.15);
       border-color: rgba(255,255,255,0.4);
+    }
+
+    /* Glitch effect for admin message */
+    .glitch-text {
+      animation: glitch 5s infinite;
+    }
+    @keyframes glitch {
+      0%, 100% { transform: skew(0deg, 0deg); opacity: 1; }
+      95% { transform: skew(0deg, 0deg); opacity: 1; }
+      96% { transform: skew(2deg, 0.5deg); opacity: 0.8; text-shadow: 2px 0 red, -2px 0 blue; }
+      97% { transform: skew(-2deg, -0.5deg); opacity: 0.9; text-shadow: -2px 0 red, 2px 0 blue; }
+      98% { transform: skew(0deg, 0deg); opacity: 1; text-shadow: none; }
     }
 
     .join-neon {
@@ -419,7 +488,7 @@
       top: 8px;
       right: 12px;
       font-size: 16px;
-      cursor: pointer;
+      cursor: none;
       opacity: 0.5;
       transition: 0.2s;
       background: none;
@@ -463,13 +532,14 @@
       0%,100% { opacity: 0.7; border-color: #ffaa33; }
       50% { opacity: 1; border-color: #ffcc66; box-shadow: 0 0 4px #ffaa33; }
     }
-
-    .completion-highlight {
-      /* No visual change - only text content differs */
-    }
   </style>
 </head>
 <body>
+
+  <!-- Custom Cursor Element -->
+  <div id="customCursor"></div>
+  <!-- Scanline overlay for CRT effect -->
+  <div class="scanlines"></div>
 
   <div class="terminal">
 
@@ -529,7 +599,7 @@
     <div style="margin-top:12px; padding:10px; border:1px solid #ffffff; border-radius:6px; background:#000000;" class="admin-glow">
       <div style="font-size:12px; opacity:0.7; margin-bottom:6px;">ADMIN MESSAGE</div>
       <div id="adminMessage" style="font-size:13px; line-height:1.4; position:relative; overflow:hidden; min-height:72px;">
-        <div id="adminInner" style="transition: opacity 0.6s ease, transform 0.6s ease;">
+        <div id="adminInner" class="glitch-text" style="transition: opacity 0.6s ease, transform 0.6s ease;">
           ⏳ Project109T launches in 7 days.<br>
           Token release is frozen until then.<br>
           Countdown in progress — prepare for Day 1.<br>
@@ -585,22 +655,39 @@
     <div class="launch-date">🔒 supply frozen • release starts after countdown</div>
   </div>
 
+  <!-- Custom cursor movement script -->
+  <script>
+    (function() {
+      const cursor = document.getElementById('customCursor');
+      if (cursor) {
+        document.addEventListener('mousemove', (e) => {
+          cursor.style.left = e.clientX + 'px';
+          cursor.style.top = e.clientY + 'px';
+        });
+        document.addEventListener('mouseleave', () => {
+          cursor.style.opacity = '0';
+        });
+        document.addEventListener('mouseenter', () => {
+          cursor.style.opacity = '1';
+        });
+      }
+    })();
+  </script>
+
 <script>
 (function() {
   'use strict';
 
   // ============================================================================
-  // CONSTANTS & CONFIGURATION (UTC-based daily release)
+  // FIXED GLOBAL LAUNCH DATE – ALL DEVICES SYNCED TO THIS
+  // Change this date to your actual planned launch time (UTC)
   // ============================================================================
+  const GLOBAL_LAUNCH_DATE = new Date('2026-04-22T00:00:00Z');  // <-- Adjust as needed
+  
   const CONFIG = {
     MAX_SUPPLY: 109,
-    PRELAUNCH_DAYS: 7,
-    STORAGE_KEYS: {
-      START_DATE: 'project109_start_utc',      // stored as ISO string
-      IS_LAUNCHED: 'project109_is_launched',
-      LAUNCH_TIMESTAMP: 'project109_launch_timestamp',
-      STATE: 'project109_state'
-    },
+    RELEASE_INTERVAL_MS: 24 * 60 * 60 * 1000,  // exactly 24 hours
+    GLOBAL_LAUNCH_TIMESTAMP: GLOBAL_LAUNCH_DATE.getTime(),
     STATES: {
       PRELAUNCH: 'prelaunch',
       ACTIVE: 'active',
@@ -608,127 +695,64 @@
     }
   };
 
-  const PRELAUNCH_DURATION_MS = CONFIG.PRELAUNCH_DAYS * 24 * 60 * 60 * 1000;
-  
   // ============================================================================
-  // UTC-BASED DAY CALCULATION
-  // ============================================================================
-  function getUTCDayStart(date) {
-    const d = new Date(date);
-    d.setUTCHours(0, 0, 0, 0);
-    return d;
-  }
-
-  function calculateDaysElapsedFromStart(startDate) {
-    if (!startDate) return 0;
-    const nowUTC = getUTCDayStart(new Date());
-    const startUTC = getUTCDayStart(startDate);
-    const diffMs = nowUTC - startUTC;
-    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
-    return Math.min(days, CONFIG.MAX_SUPPLY);
-  }
-
-  function getNextReleaseTime(startDate, currentDay) {
-    const nextRelease = getUTCDayStart(startDate);
-    nextRelease.setUTCDate(startDate.getUTCDate() + currentDay);
-    return nextRelease;
-  }
-
-  // ============================================================================
-  // STATE MANAGEMENT
+  // STATE DETERMINATION (derived from global timestamp, not localStorage)
   // ============================================================================
   const StateManager = {
-    currentState: CONFIG.STATES.PRELAUNCH,
-    launchTimestamp: Date.now() + PRELAUNCH_DURATION_MS,
-    startDate: null,
-    isLaunched: false,
-    isCompleted: false,
+    currentState: null,
     
     initialize() {
-      this.loadFromStorage();
+      this.updateStateFromTime();
+    },
+    
+    updateStateFromTime() {
+      const now = Date.now();
+      const launchTime = CONFIG.GLOBAL_LAUNCH_TIMESTAMP;
       
-      if (!this.loadFromStorage()) {
-        this.launchTimestamp = Date.now() + PRELAUNCH_DURATION_MS;
+      if (now < launchTime) {
         this.currentState = CONFIG.STATES.PRELAUNCH;
-        this.isLaunched = false;
-        this.isCompleted = false;
-        this.saveToStorage();
-      }
-      
-      if (this.currentState === CONFIG.STATES.PRELAUNCH && Date.now() >= this.launchTimestamp) {
-        this.transitionToActive();
-      }
-      
-      if (this.currentState === CONFIG.STATES.ACTIVE && this.startDate) {
-        const daysElapsed = calculateDaysElapsedFromStart(this.startDate);
-        if (daysElapsed >= CONFIG.MAX_SUPPLY) {
-          this.transitionToCompleted();
-        }
-      }
-    },
-    
-    loadFromStorage() {
-      try {
-        const storedState = localStorage.getItem(CONFIG.STORAGE_KEYS.STATE);
-        const storedLaunch = localStorage.getItem(CONFIG.STORAGE_KEYS.LAUNCH_TIMESTAMP);
-        const storedStart = localStorage.getItem(CONFIG.STORAGE_KEYS.START_DATE);
-        const storedIsLaunched = localStorage.getItem(CONFIG.STORAGE_KEYS.IS_LAUNCHED);
+      } else {
+        // Calculate days since launch
+        const elapsedMs = now - launchTime;
+        const daysElapsed = Math.floor(elapsedMs / CONFIG.RELEASE_INTERVAL_MS) + 1;
         
-        if (storedState) {
-          this.currentState = storedState;
-          if (storedLaunch) this.launchTimestamp = parseInt(storedLaunch, 10);
-          if (storedStart) this.startDate = new Date(storedStart);
-          if (storedIsLaunched) this.isLaunched = storedIsLaunched === 'true';
-          
-          if (this.startDate && isNaN(this.startDate.getTime())) {
-            this.startDate = null;
-          }
-          
-          return true;
+        if (daysElapsed >= CONFIG.MAX_SUPPLY) {
+          this.currentState = CONFIG.STATES.COMPLETED;
+        } else {
+          this.currentState = CONFIG.STATES.ACTIVE;
         }
-      } catch (e) {
-        console.warn('Failed to load from localStorage:', e);
       }
-      return false;
-    },
-    
-    saveToStorage() {
-      try {
-        localStorage.setItem(CONFIG.STORAGE_KEYS.STATE, this.currentState);
-        localStorage.setItem(CONFIG.STORAGE_KEYS.LAUNCH_TIMESTAMP, this.launchTimestamp.toString());
-        localStorage.setItem(CONFIG.STORAGE_KEYS.IS_LAUNCHED, this.isLaunched.toString());
-        if (this.startDate) {
-          localStorage.setItem(CONFIG.STORAGE_KEYS.START_DATE, this.startDate.toISOString());
-        }
-      } catch (e) {
-        console.warn('Failed to save to localStorage:', e);
-      }
-    },
-    
-    transitionToActive() {
-      this.currentState = CONFIG.STATES.ACTIVE;
-      this.isLaunched = true;
-      // Use UTC midnight of current day as start
-      this.startDate = getUTCDayStart(new Date());
-      this.saveToStorage();
-    },
-    
-    transitionToCompleted() {
-      this.currentState = CONFIG.STATES.COMPLETED;
-      this.isCompleted = true;
-      this.saveToStorage();
     },
     
     getCurrentDay() {
-      if (this.currentState === CONFIG.STATES.PRELAUNCH) return 0;
-      if (this.currentState === CONFIG.STATES.COMPLETED) return CONFIG.MAX_SUPPLY;
-      return calculateDaysElapsedFromStart(this.startDate);
+      const now = Date.now();
+      const launchTime = CONFIG.GLOBAL_LAUNCH_TIMESTAMP;
+      
+      if (now < launchTime) return 0;
+      
+      const elapsedMs = now - launchTime;
+      const days = Math.floor(elapsedMs / CONFIG.RELEASE_INTERVAL_MS) + 1;
+      return Math.min(days, CONFIG.MAX_SUPPLY);
     },
     
     getReleasedTokens() {
-      if (this.currentState === CONFIG.STATES.PRELAUNCH) return 0;
-      if (this.currentState === CONFIG.STATES.COMPLETED) return CONFIG.MAX_SUPPLY;
-      return calculateDaysElapsedFromStart(this.startDate);
+      const day = this.getCurrentDay();
+      return (day === 0 || day > CONFIG.MAX_SUPPLY) ? 0 : day;
+    },
+    
+    getNextReleaseTimestamp() {
+      if (this.currentState !== CONFIG.STATES.ACTIVE) return null;
+      
+      const day = this.getCurrentDay();
+      if (day >= CONFIG.MAX_SUPPLY) return null;
+      
+      return CONFIG.GLOBAL_LAUNCH_TIMESTAMP + (day * CONFIG.RELEASE_INTERVAL_MS);
+    },
+    
+    getLaunchCountdownRemaining() {
+      const now = Date.now();
+      const remaining = CONFIG.GLOBAL_LAUNCH_TIMESTAMP - now;
+      return Math.max(0, remaining);
     }
   };
 
@@ -809,19 +833,19 @@
     
     updateMiscUIToActive() {
       if (DOM.preLaunchBadge) DOM.preLaunchBadge.style.display = 'none';
-      if (DOM.statusText) DOM.statusText.innerHTML = 'Status: ACTIVE (Daily Release)';
+      if (DOM.statusText) DOM.statusText.innerHTML = 'Status: ACTIVE (24‑Hour Release)';
       if (DOM.joinNeonText) DOM.joinNeonText.innerHTML = 'Joining 109 Club...';
       
       DOM.asciiBox.innerHTML = `╔══════════════════════════════════════╗
 ║          PROJECT <span style="color:#ffffff; text-shadow:0 0 8px #ffffff;">109</span>T            ║
 ╠══════════════════════════════════════╣
-║   ░ SYSTEM: DAILY TOKEN RELEASE      ║
+║   ░ SYSTEM: 24‑HR TOKEN RELEASE      ║
 ║   ░ MAX SUPPLY: 109                  ║
 ╚══════════════════════════════════════╝`;
       
       DOM.tickerContent.innerHTML = `
-        SYS::ONLINE &nbsp;|&nbsp; TOKEN_RELEASE: ACTIVE &nbsp;|&nbsp; SUPPLY: UNLOCKING &nbsp;|&nbsp; SCARCITY_INDEX: RISING &nbsp;|&nbsp; CHAIN: SOLANA &nbsp;|&nbsp; PROTOCOL: D1→D109 &nbsp;|&nbsp; NODE: CONNECTED &nbsp;|&nbsp; PATIENCE: REQUIRED &nbsp;|&nbsp;
-        SYS::ONLINE &nbsp;|&nbsp; TOKEN_RELEASE: ACTIVE &nbsp;|&nbsp; SUPPLY: UNLOCKING &nbsp;|&nbsp; SCARCITY_INDEX: RISING &nbsp;|&nbsp; CHAIN: SOLANA &nbsp;|&nbsp; PROTOCOL: D1→D109 &nbsp;|&nbsp; NODE: CONNECTED &nbsp;|&nbsp; PATIENCE: REQUIRED &nbsp;|&nbsp;
+        SYS::ONLINE &nbsp;|&nbsp; TOKEN_RELEASE: ACTIVE &nbsp;|&nbsp; SUPPLY: UNLOCKING &nbsp;|&nbsp; SCARCITY_INDEX: RISING &nbsp;|&nbsp; CHAIN: SOLANA &nbsp;|&nbsp; PROTOCOL: 24H_CYCLE &nbsp;|&nbsp; NODE: CONNECTED &nbsp;|&nbsp;
+        SYS::ONLINE &nbsp;|&nbsp; TOKEN_RELEASE: ACTIVE &nbsp;|&nbsp; SUPPLY: UNLOCKING &nbsp;|&nbsp; SCARCITY_INDEX: RISING &nbsp;|&nbsp; CHAIN: SOLANA &nbsp;|&nbsp; PROTOCOL: 24H_CYCLE &nbsp;|&nbsp; NODE: CONNECTED &nbsp;|&nbsp;
       `;
     },
     
@@ -849,7 +873,6 @@
       
       if (DOM.supply.innerText !== newSupplyText) {
         DOM.supply.classList.add('bounce');
-        // Use animationend event for cleanup instead of setTimeout
         const onAnimEnd = () => {
           DOM.supply.classList.remove('bounce');
           DOM.supply.removeEventListener('animationend', onAnimEnd);
@@ -878,18 +901,16 @@
   };
 
   // ============================================================================
-  // TIME CALCULATION MODULE (UTC‑aware)
+  // TIME CALCULATION MODULE (24‑hour countdown based on global launch)
   // ============================================================================
   const TimeCalculator = {
     getTokenReleaseTimeLeft() {
       if (StateManager.currentState !== CONFIG.STATES.ACTIVE) return '00:00:00';
-      if (!StateManager.startDate) return '00:00:00';
       
-      const now = new Date();
-      const day = StateManager.getCurrentDay();
-      if (day >= CONFIG.MAX_SUPPLY) return '00:00:00';
+      const nextRelease = StateManager.getNextReleaseTimestamp();
+      if (!nextRelease) return '00:00:00';
       
-      const nextRelease = getNextReleaseTime(StateManager.startDate, day);
+      const now = Date.now();
       let remaining = nextRelease - now;
       if (remaining < 0) remaining = 0;
       
@@ -913,7 +934,7 @@
   };
 
   // ============================================================================
-  // PRE-LAUNCH COUNTDOWN MODULE (with efficiency improvement)
+  // PRE-LAUNCH COUNTDOWN MODULE (global)
   // ============================================================================
   const PreLaunchCountdown = {
     lastDisplayedStr: '',
@@ -921,8 +942,7 @@
     update() {
       if (StateManager.currentState !== CONFIG.STATES.PRELAUNCH) return;
       
-      const now = Date.now();
-      const remaining = StateManager.launchTimestamp - now;
+      const remaining = StateManager.getLaunchCountdownRemaining();
       
       if (remaining <= 0) {
         this.handleLaunchTrigger();
@@ -937,12 +957,10 @@
       
       const countdownStr = `${days}d ${hours.toString().padStart(2, '0')}h ${mins.toString().padStart(2, '0')}m ${secs.toString().padStart(2, '0')}s`;
       
-      // Only update DOM if string actually changed
       if (DOM.countdownDisplay && DOM.countdownDisplay.innerText !== countdownStr) {
         DOM.countdownDisplay.innerText = countdownStr;
       }
       
-      // Update admin message only if the countdown string changed (every second)
       if (this.lastDisplayedStr !== countdownStr) {
         this.lastDisplayedStr = countdownStr;
         UIUpdater.updateAdminMessage(`⏳ PROJECT109T LAUNCHES IN:<br>${countdownStr}<br>Token supply frozen until then.`);
@@ -950,26 +968,28 @@
     },
     
     handleLaunchTrigger() {
-      StateManager.transitionToActive();
+      StateManager.updateStateFromTime();
       
-      UIUpdater.updateSummaryToActive();
-      UIUpdater.updateRoadmapToActive();
-      UIUpdater.updateMiscUIToActive();
-      UIUpdater.hideLaunchNotification();
-      
-      UIUpdater.updateAdminMessage('🚀 Project109T is LIVE! First token released.<br>Daily unlocks begin now. Welcome to Day 1.');
-      
-      UIUpdater.updateSupplyDisplay();
-      UIUpdater.updateCounterDisplay();
-      TimeCalculator.updateClock();
-      
-      NotificationManager.enable();
-      IntervalManager.startActiveIntervals();
+      if (StateManager.currentState === CONFIG.STATES.ACTIVE) {
+        UIUpdater.updateSummaryToActive();
+        UIUpdater.updateRoadmapToActive();
+        UIUpdater.updateMiscUIToActive();
+        UIUpdater.hideLaunchNotification();
+        
+        UIUpdater.updateAdminMessage('🚀 Project109T is LIVE! First token released.<br>24‑hour unlocks begin now. Welcome to Day 1.');
+        
+        UIUpdater.updateSupplyDisplay();
+        UIUpdater.updateCounterDisplay();
+        TimeCalculator.updateClock();
+        
+        NotificationManager.enable();
+        IntervalManager.startActiveIntervals();
+      }
     }
   };
 
   // ============================================================================
-  // NOTIFICATION MODULE (text improved)
+  // NOTIFICATION MODULE
   // ============================================================================
   const NotificationManager = {
     browserPermission: false,
@@ -1059,7 +1079,10 @@
     },
     
     startPreLaunchIntervals() {
-      const countdownId = setInterval(() => PreLaunchCountdown.update(), 1000);
+      const countdownId = setInterval(() => {
+        StateManager.updateStateFromTime();
+        PreLaunchCountdown.update();
+      }, 1000);
       this.intervals.push(countdownId);
     },
     
@@ -1067,10 +1090,9 @@
       this.clearAll();
       
       const tokenUpdateId = setInterval(() => {
-        const day = StateManager.getCurrentDay();
+        StateManager.updateStateFromTime();
         
-        if (day >= CONFIG.MAX_SUPPLY && StateManager.currentState === CONFIG.STATES.ACTIVE) {
-          StateManager.transitionToCompleted();
+        if (StateManager.currentState === CONFIG.STATES.COMPLETED) {
           UIUpdater.updateSummaryToCompleted();
           UIUpdater.updateRoadmapToCompleted();
           UIUpdater.updateMiscUIToCompleted();
@@ -1084,7 +1106,7 @@
         
         UIUpdater.updateSupplyDisplay();
         UIUpdater.updateCounterDisplay();
-      }, 60000);
+      }, 1000);
       
       const clockId = setInterval(() => TimeCalculator.updateClock(), 1000);
       
@@ -1150,7 +1172,7 @@
       UIUpdater.updateRoadmapToActive();
       UIUpdater.updateMiscUIToActive();
       UIUpdater.hideLaunchNotification();
-      UIUpdater.updateAdminMessage('🚀 Project109T is LIVE! Daily unlocks in progress.');
+      UIUpdater.updateAdminMessage('🚀 Project109T is LIVE! 24‑hour unlocks in progress.');
       UIUpdater.updateSupplyDisplay();
       UIUpdater.updateCounterDisplay();
       TimeCalculator.updateClock();
