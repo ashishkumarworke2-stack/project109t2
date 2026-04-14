@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project109T Terminal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Project109T Terminal — Auto-Updating Launch</title>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap');
@@ -220,7 +220,7 @@
   100% { transform: translateX(-50%); }
 }
 
-/* Toast notification styles */
+/* Toast notification styles (disabled during pre-launch) */
 .toast-notification {
   position: fixed;
   bottom: 20px;
@@ -351,6 +351,139 @@
   0%, 100% { opacity: 0.95; text-shadow: 0 0 0px #ffffff; }
   50% { opacity: 1; text-shadow: 0 0 2px rgba(255,255,255,0.3); }
 }
+
+/* ========== PRE-LAUNCH NOTIFICATION BANNER (countdown to launch) ========== */
+.launch-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  max-width: 340px;
+  background: #000000ee;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.7);
+  border-radius: 12px;
+  padding: 14px 18px;
+  z-index: 2000;
+  font-family: 'JetBrains Mono', monospace;
+  box-shadow: 0 0 20px rgba(255,255,255,0.25), 0 0 8px rgba(255,255,255,0.3);
+  transition: opacity 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.3s ease;
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.launch-notification.hide {
+  opacity: 0;
+  transform: translateX(50px);
+  pointer-events: none;
+}
+
+.launch-notification .notif-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  padding-bottom: 6px;
+}
+
+.launch-notification .notif-icon {
+  font-size: 20px;
+  filter: drop-shadow(0 0 4px #ffffff);
+  animation: iconPulse 1.2s infinite ease;
+}
+
+@keyframes iconPulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); text-shadow: 0 0 5px white; }
+}
+
+.launch-notification .notif-title {
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #fff, #aaa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.launch-notification .countdown-block {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  margin: 10px 0 8px 0;
+  letter-spacing: 2px;
+  text-shadow: 0 0 6px rgba(255,255,255,0.6);
+}
+
+.launch-notification .countdown-label {
+  font-size: 9px;
+  text-align: center;
+  opacity: 0.6;
+  letter-spacing: 1px;
+}
+
+.launch-notification .launch-date {
+  font-size: 10px;
+  text-align: center;
+  margin-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  padding-top: 6px;
+  opacity: 0.7;
+}
+
+.close-notif {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: 0.2s;
+  background: none;
+  border: none;
+  color: white;
+  font-family: monospace;
+}
+.close-notif:hover {
+  opacity: 1;
+  text-shadow: 0 0 4px white;
+}
+
+@media (max-width: 550px) {
+  .launch-notification {
+    top: 12px;
+    right: 12px;
+    left: 12px;
+    max-width: none;
+    width: auto;
+    padding: 10px 14px;
+  }
+  .launch-notification .countdown-block {
+    font-size: 18px;
+  }
+}
+
+/* Pre-launch status indicator */
+.pre-launch-badge {
+  display: inline-block;
+  background: #000;
+  border: 1px solid #ffaa33;
+  color: #ffaa33;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin-left: 10px;
+  letter-spacing: 1px;
+  text-shadow: 0 0 2px #ffaa33;
+  animation: badgePulse 2s infinite;
+}
+@keyframes badgePulse {
+  0%,100% { opacity: 0.7; border-color: #ffaa33; }
+  50% { opacity: 1; border-color: #ffcc66; box-shadow: 0 0 4px #ffaa33; }
+}
 </style>
 </head>
 <body>
@@ -363,11 +496,11 @@
     <div class="corner-bracket bl"></div>
     <div class="corner-bracket br"></div>
 
-    <!-- Data stream ticker -->
+    <!-- Data stream ticker (updated to reflect pre-launch) -->
     <div class="data-ticker">
       <span class="data-ticker-inner">
-        SYS::ONLINE &nbsp;|&nbsp; TOKEN_RELEASE: ACTIVE &nbsp;|&nbsp; SUPPLY: LOCKED &nbsp;|&nbsp; SCARCITY_INDEX: RISING &nbsp;|&nbsp; CHAIN: SOLANA &nbsp;|&nbsp; PROTOCOL: D1→D109 &nbsp;|&nbsp; NODE: CONNECTED &nbsp;|&nbsp; PATIENCE: REQUIRED &nbsp;|&nbsp;
-        SYS::ONLINE &nbsp;|&nbsp; TOKEN_RELEASE: ACTIVE &nbsp;|&nbsp; SUPPLY: LOCKED &nbsp;|&nbsp; SCARCITY_INDEX: RISING &nbsp;|&nbsp; CHAIN: SOLANA &nbsp;|&nbsp; PROTOCOL: D1→D109 &nbsp;|&nbsp; NODE: CONNECTED &nbsp;|&nbsp; PATIENCE: REQUIRED &nbsp;|&nbsp;
+        SYS::PRELAUNCH &nbsp;|&nbsp; COUNTDOWN ACTIVE &nbsp;|&nbsp; TOKEN_RELEASE: PAUSED &nbsp;|&nbsp; SUPPLY: 0 / 109 &nbsp;|&nbsp; STATUS: LOCKED &nbsp;|&nbsp; CHAIN: SOLANA &nbsp;|&nbsp; LAUNCH: 7 DAYS &nbsp;|&nbsp;
+        SYS::PRELAUNCH &nbsp;|&nbsp; COUNTDOWN ACTIVE &nbsp;|&nbsp; TOKEN_RELEASE: PAUSED &nbsp;|&nbsp; SUPPLY: 0 / 109 &nbsp;|&nbsp; STATUS: LOCKED &nbsp;|&nbsp; CHAIN: SOLANA &nbsp;|&nbsp; LAUNCH: 7 DAYS &nbsp;|&nbsp;
       </span>
     </div>
 
@@ -393,7 +526,7 @@
 ╔══════════════════════════════════════╗
 ║          PROJECT <span style="color:#ffffff; text-shadow:0 0 8px #ffffff;">109</span>T            ║
 ╠══════════════════════════════════════╣
-║   ░ SYSTEM: DAILY TOKEN RELEASE      ║
+║   ░ SYSTEM: PRE-LAUNCH (PAUSED)      ║
 ║   ░ MAX SUPPLY: 109                  ║
 ╚══════════════════════════════════════╝
 </pre>
@@ -401,24 +534,24 @@
     <div class="line prompt" id="init"></div>
 
     <div class="line prompt">
-      Total Released: <span class="highlight supply-update" id="supply">1 / 109 tokens</span>
+      Total Released: <span class="highlight supply-update" id="supply">0 / 109 tokens</span> <span class="pre-launch-badge" id="preLaunchBadge">PRE-LAUNCH</span>
     </div>
 
-    <!-- Main clock: now shows time until next token release -->
+    <!-- Next token clock shows zero until launch -->
     <div class="line prompt clock-pulse" id="clock">Next Token In: --:--:--</div>
 
-    <div class="line prompt" id="counter">Day 1 / 109</div>
+    <div class="line prompt" id="counter">Day 0 / 109</div>
 
-    <div class="line prompt"><span class="status-pulse">Status: ACTIVE</span></div>
+    <div class="line prompt"><span class="status-pulse" id="statusText">Status: PRE-LAUNCH (Countdown Active)</span></div>
 
     <div style="margin-top:12px; padding:10px; border:1px solid #ffffff; border-radius:6px; background:#000000;" class="admin-glow">
       <div style="font-size:12px; opacity:0.7; margin-bottom:6px;">ADMIN MESSAGE</div>
       <div id="adminMessage" style="font-size:13px; line-height:1.4; position:relative; overflow:hidden; min-height:72px;">
         <div id="adminInner" style="transition: opacity 0.6s ease, transform 0.6s ease;">
-          Welcome to Project109T.<br>
-          Glad to have new visitors and token holders onboard.<br>
-          You are early — and that matters.<br>
-          Stay with the timeline.
+          ⏳ Project109T launches in 7 days.<br>
+          Token release is frozen until then.<br>
+          Countdown in progress — prepare for Day 1.<br>
+          Patience = prime position.
         </div>
       </div>
     </div>
@@ -433,53 +566,134 @@
       <a href="https://dexscreener.com" target="_blank" class="button">[ Dex Screener ]</a>
     </div>
 
-    <div style="margin-top:12px; font-size:12px; opacity:0.85; line-height:1.6;">
+    <!-- SUMMARY TEXT - will auto-update after launch -->
+    <div id="summaryText" style="margin-top:12px; font-size:12px; opacity:0.85; line-height:1.6;">
       Project109T is a limited 109-day token experiment designed around time, scarcity, and patience.<br><br>
-      Every 24 hours, exactly one new token is unlocked — no pre-minting, no shortcuts, and no resets. The system moves forward only, creating a clear timeline from D1 to D109.<br><br>
-      Early participants naturally hold the rarest positions, while later entries reflect the progression of the system over time. This creates a simple but powerful structure driven entirely by time.<br><br>
-      There are no complex mechanics — just a transparent release schedule, a fixed maximum supply, and a shared experience as each new day unlocks.
+      <strong>📅 PRE-LAUNCH PERIOD: The first token will be released exactly 7 days from now.</strong> Until then, supply remains zero, and the daily release timer is paused. The official countdown is active.<br><br>
+      Every 24 hours after launch, exactly one new token unlocks — no pre-minting, no shortcuts. The system moves forward only, creating a clear timeline from D1 to D109.<br><br>
+      Early participants naturally hold the rarest positions. This is a pure time‑based structure.
     </div>
 
-    <div style="margin-top:12px; padding:10px; border:1px solid #ffffff; border-radius:6px; background:#000000;">
+    <!-- ROADMAP - will auto-update after launch (remove pre-launch line) -->
+    <div id="roadmapContainer" style="margin-top:12px; padding:10px; border:1px solid #ffffff; border-radius:6px; background:#000000;">
       <div style="font-size:12px; opacity:0.7; margin-bottom:6px;">ROADMAP</div>
-      <div style="font-size:13px; line-height:1.6;">
+      <div id="roadmapList" style="font-size:13px; line-height:1.6;">
+        <div class="roadmap-item">░ Pre-Launch (7 days) — Countdown / Zero supply</div>
         <div class="roadmap-item">░ Day 1–10: Initial launch phase — early holders enter</div>
         <div class="roadmap-item">░ Day 11–30: Awareness growth — community forming</div>
         <div class="roadmap-item">░ Day 31–60: Mid-cycle — scarcity becomes visible</div>
         <div class="roadmap-item">░ Day 61–90: Late phase — positions become rare</div>
         <div class="roadmap-item">░ Day 91–109: Final stretch — maximum scarcity reached</div>
-        <div class="roadmap-item">░ Day 109: Completion — full supply unlocked</div>
       </div>
     </div>
 
     <div class="line prompt">
-      <span class="join-neon">Joining 109 Club...</span><span class="cursor"></span>
+      <span class="join-neon" id="joinNeonText">Pre‑launch countdown active →</span><span class="cursor"></span>
     </div>
   </div>
 
   <div id="toastContainer"></div>
 
+  <!-- PERSISTENT LAUNCH NOTIFICATION (countdown to launch, shows until launch) -->
+  <div id="launchNotify" class="launch-notification">
+    <button class="close-notif" id="closeNotifyBtn" aria-label="Close">✕</button>
+    <div class="notif-header">
+      <span class="notif-icon">⏳</span>
+      <span class="notif-title">TOKEN LAUNCH IN</span>
+    </div>
+    <div id="countdownDisplay" class="countdown-block">--d --h --m --s</div>
+    <div class="countdown-label">until first token release • Day 1</div>
+    <div class="launch-date">🔒 supply frozen • release starts after countdown</div>
+  </div>
+
 <script>
-  // ========================
-  // ORIGINAL TOKEN LOGIC (unchanged)
-  // ========================
-  let startDate;
-  if (localStorage.getItem("project109_start")) {
-    startDate = new Date(localStorage.getItem("project109_start"));
-  } else {
-    startDate = new Date();
-    localStorage.setItem("project109_start", startDate.toISOString());
+  // ============================================================
+  // 7-DAY PRE-LAUNCH LOGIC WITH AUTO-UPDATE FOR SUMMARY & ROADMAP
+  // After countdown finishes, everything updates automatically.
+  // ============================================================
+
+  const PRELAUNCH_DURATION_MS = 7 * 24 * 60 * 60 * 1000;
+  const launchTimestamp = Date.now() + PRELAUNCH_DURATION_MS;
+  let isLaunched = false;
+  let originalStartDate = null;
+  let tokenUpdateInterval = null;
+  let clockInterval = null;
+
+  // DOM elements that will auto-update
+  const supplySpan = document.getElementById("supply");
+  const counterDiv = document.getElementById("counter");
+  const clockDiv = document.getElementById("clock");
+  const initLine = document.getElementById("init");
+  const adminInnerDiv = document.getElementById("adminInner");
+  const statusSpan = document.getElementById("statusText");
+  const preLaunchBadge = document.getElementById("preLaunchBadge");
+  const summaryDiv = document.getElementById("summaryText");
+  const roadmapListDiv = document.getElementById("roadmapList");
+  const joinNeonSpan = document.getElementById("joinNeonText");
+  const systemPre = document.querySelector("pre[style*='text-align:left']"); // the ascii box
+
+  // Helper: update summary text to ACTIVE version
+  function updateSummaryToActive() {
+    summaryDiv.innerHTML = `
+      Project109T is a limited 109-day token experiment designed around time, scarcity, and patience.<br><br>
+      <strong>✅ TOKEN RELEASE IS NOW ACTIVE.</strong> One new token unlocks every 24 hours — no pre-minting, no shortcuts. The system moves forward only, creating a clear timeline from D1 to D109.<br><br>
+      Early participants naturally hold the rarest positions, while later entries reflect the progression of the system over time. This creates a simple but powerful structure driven entirely by time.<br><br>
+      There are no complex mechanics — just a transparent release schedule, a fixed maximum supply, and a shared experience as each new day unlocks.
+    `;
   }
 
+  // Helper: update roadmap to remove pre-launch line
+  function updateRoadmapToActive() {
+    roadmapListDiv.innerHTML = `
+      <div class="roadmap-item">░ Day 1–10: Initial launch phase — early holders enter</div>
+      <div class="roadmap-item">░ Day 11–30: Awareness growth — community forming</div>
+      <div class="roadmap-item">░ Day 31–60: Mid-cycle — scarcity becomes visible</div>
+      <div class="roadmap-item">░ Day 61–90: Late phase — positions become rare</div>
+      <div class="roadmap-item">░ Day 91–109: Final stretch — maximum scarcity reached</div>
+      <div class="roadmap-item">░ Day 109: Completion — full supply unlocked</div>
+    `;
+    // re-trigger animation for new items
+    const newItems = document.querySelectorAll('#roadmapList .roadmap-item');
+    newItems.forEach((item, idx) => {
+      item.style.animation = 'none';
+      item.offsetHeight;
+      item.style.animation = `roadmapReveal 0.5s ease forwards ${idx * 0.1}s`;
+    });
+  }
+
+  // Helper: update UI for active launch (badge, status, ascii box)
+  function updateMiscUItoActive() {
+    if (preLaunchBadge) preLaunchBadge.style.display = "none";
+    if (statusSpan) statusSpan.innerHTML = "Status: ACTIVE (Daily Release)";
+    if (joinNeonSpan) joinNeonSpan.innerHTML = "Joining 109 Club...";
+    // update the ascii box top right corner text
+    if (systemPre) {
+      systemPre.innerHTML = `╔══════════════════════════════════════╗
+║          PROJECT <span style="color:#ffffff; text-shadow:0 0 8px #ffffff;">109</span>T            ║
+╠══════════════════════════════════════╣
+║   ░ SYSTEM: DAILY TOKEN RELEASE      ║
+║   ░ MAX SUPPLY: 109                  ║
+╚══════════════════════════════════════╝`;
+    }
+    // update data ticker text (optional but nice)
+    const tickerInner = document.querySelector(".data-ticker-inner");
+    if (tickerInner) {
+      tickerInner.innerHTML = `
+        SYS::ONLINE &nbsp;|&nbsp; TOKEN_RELEASE: ACTIVE &nbsp;|&nbsp; SUPPLY: UNLOCKING &nbsp;|&nbsp; SCARCITY_INDEX: RISING &nbsp;|&nbsp; CHAIN: SOLANA &nbsp;|&nbsp; PROTOCOL: D1→D109 &nbsp;|&nbsp; NODE: CONNECTED &nbsp;|&nbsp; PATIENCE: REQUIRED &nbsp;|&nbsp;
+        SYS::ONLINE &nbsp;|&nbsp; TOKEN_RELEASE: ACTIVE &nbsp;|&nbsp; SUPPLY: UNLOCKING &nbsp;|&nbsp; SCARCITY_INDEX: RISING &nbsp;|&nbsp; CHAIN: SOLANA &nbsp;|&nbsp; PROTOCOL: D1→D109 &nbsp;|&nbsp; NODE: CONNECTED &nbsp;|&nbsp; PATIENCE: REQUIRED &nbsp;|&nbsp;
+      `;
+    }
+  }
+
+  // Normal token release logic (original)
   function updateTokenRelease() {
+    if (!isLaunched) return;
     let now = new Date();
-    let diffTime = now - startDate;
+    let diffTime = now - originalStartDate;
     let diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
     if (diffDays < 1) diffDays = 1;
     if (diffDays > 109) diffDays = 109;
-    document.getElementById("counter").innerText = `Day ${diffDays} / 109`;
-    
-    const supplySpan = document.getElementById("supply");
+    counterDiv.innerText = `Day ${diffDays} / 109`;
     const newSupplyText = `${diffDays} / 109 tokens`;
     if (supplySpan.innerText !== newSupplyText) {
       supplySpan.classList.add('bounce');
@@ -487,20 +701,16 @@
     }
     supplySpan.innerText = newSupplyText;
   }
-  updateTokenRelease();
-  setInterval(updateTokenRelease, 60000);
-
-  // ========================
-  // TOKEN RELEASE TIME LEFT (for main clock and notifications)
-  // ========================
-  function getTokenReleaseTimeLeft() {
+  
+  function getTokenReleaseTimeLeftReal() {
+    if (!isLaunched) return "00:00:00";
     const now = new Date();
-    const diffTime = now - startDate;
+    const diffTime = now - originalStartDate;
     let diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
     if (diffDays < 1) diffDays = 1;
     if (diffDays > 109) diffDays = 109;
-    const nextRelease = new Date(startDate);
-    nextRelease.setDate(startDate.getDate() + diffDays);
+    const nextRelease = new Date(originalStartDate);
+    nextRelease.setDate(originalStartDate.getDate() + diffDays);
     let remaining = nextRelease - now;
     if (remaining < 0) remaining = 0;
     const totalSeconds = Math.floor(remaining / 1000);
@@ -509,68 +719,13 @@
     const s = totalSeconds % 60;
     return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   }
-
-  function updateMainClock() {
-    const timeLeft = getTokenReleaseTimeLeft();
-    document.getElementById("clock").innerText = `Next Token In: ${timeLeft}`;
+  
+  function updateMainClockReal() {
+    if (!isLaunched) return;
+    clockDiv.innerText = `Next Token In: ${getTokenReleaseTimeLeftReal()}`;
   }
-  updateMainClock();
-  setInterval(updateMainClock, 1000);
-
-  // ========================
-  // ORIGINAL TYPING & ADMIN MESSAGES (unchanged)
-  // ========================
-  function typeLine(el, text, speed = 30) {
-    el.innerHTML = "";
-    let i = 0;
-    function t() {
-      if (i < text.length) {
-        el.innerHTML += text[i];
-        i++;
-        setTimeout(t, speed);
-      }
-    }
-    t();
-  }
-  typeLine(document.getElementById("init"), "Initializing Project109T...");
-
-  const messages = [
-    "Welcome to Project109T.<br>Glad to have new visitors and token holders onboard.<br>You are early — and that matters.<br>Stay with the timeline.",
-    "Time defines value.<br>No resets.",
-    "109 tokens only.<br>Scarcity matters.",
-    "Patience = Position.<br>Position = Power."
-  ];
-  let idx = 0;
-  setInterval(() => {
-    idx = (idx + 1) % messages.length;
-    const el = document.getElementById("adminInner");
-    el.style.opacity = 0;
-    el.style.transform = "translateY(6px)";
-    setTimeout(() => {
-      el.innerHTML = messages[idx];
-      el.style.transform = "translateY(-6px)";
-      requestAnimationFrame(() => {
-        el.style.opacity = 1;
-        el.style.transform = "translateY(0)";
-      });
-    }, 300);
-  }, 8000);
-
-  // ========================
-  // WALLET CONNECT (unchanged)
-  // ========================
-  document.getElementById("connectWallet").onclick = async () => {
-    if (window.solana && window.solana.isPhantom) {
-      const res = await window.solana.connect();
-      document.getElementById("connectWallet").innerText = `[ ${res.publicKey.toString().slice(0,4)}...connected ]`;
-    } else {
-      alert("Install Phantom Wallet");
-    }
-  };
-
-  // ========================
-  // TOAST & BROWSER NOTIFICATIONS (unchanged)
-  // ========================
+  
+  // Toast system (re-enabled after launch)
   let browserNotificationPermission = false;
   function requestNotificationPermission() {
     if ('Notification' in window) {
@@ -585,11 +740,13 @@
   }
   function sendBrowserNotification(title, body) {
     if (browserNotificationPermission && 'Notification' in window && Notification.permission === 'granted') {
-      new Notification(title, { body: body });
+      new Notification(title, { body });
     }
   }
   function showToast(message, timeStr) {
+    if (!isLaunched) return;
     const container = document.getElementById('toastContainer');
+    if (!container) return;
     const toast = document.createElement('div');
     toast.className = 'toast-notification';
     toast.innerHTML = `
@@ -612,23 +769,129 @@
       }
     }, 8000);
   }
+  
   function schedulePeriodicNotification() {
+    if (!isLaunched) return;
     const interval = Math.floor(Math.random() * (300000 - 180000 + 1) + 180000);
     setTimeout(() => {
-      const timeLeft = getTokenReleaseTimeLeft();
-      showToast(`Next token releases in:`, timeLeft);
-      sendBrowserNotification('Project109T Token Alert', `Next token in: ${timeLeft}`);
-      schedulePeriodicNotification();
+      if (isLaunched) {
+        const timeLeft = getTokenReleaseTimeLeftReal();
+        showToast(`Next token releases in:`, timeLeft);
+        sendBrowserNotification('Project109T Token Alert', `Next token in: ${timeLeft}`);
+        schedulePeriodicNotification();
+      }
     }, interval);
   }
-  window.addEventListener('load', () => {
+
+  // Function to start normal release after countdown
+  function startNormalRelease() {
+    if (isLaunched) return;
+    isLaunched = true;
+    
+    // Initialize startDate for token logic
+    const nowDate = new Date();
+    if (!localStorage.getItem("project109_start")) {
+      localStorage.setItem("project109_start", nowDate.toISOString());
+      originalStartDate = nowDate;
+    } else {
+      originalStartDate = new Date(localStorage.getItem("project109_start"));
+    }
+    
+    // Update UI components
+    updateSummaryToActive();
+    updateRoadmapToActive();
+    updateMiscUItoActive();
+    
+    // Update admin message
+    if (adminInnerDiv) {
+      adminInnerDiv.innerHTML = "🚀 Project109T is LIVE! First token released.<br>Daily unlocks begin now. Welcome to Day 1.";
+    }
+    
+    // Force initial token update
+    updateTokenRelease();
+    updateMainClockReal();
+    
+    // Set intervals
+    if (tokenUpdateInterval) clearInterval(tokenUpdateInterval);
+    if (clockInterval) clearInterval(clockInterval);
+    tokenUpdateInterval = setInterval(updateTokenRelease, 60000);
+    clockInterval = setInterval(updateMainClockReal, 1000);
+    
+    // Enable notifications
     requestNotificationPermission();
-    setTimeout(() => {
-      const timeLeft = getTokenReleaseTimeLeft();
-      showToast(`Next token releases in:`, timeLeft);
-    }, 2000);
     schedulePeriodicNotification();
-  });
+    
+    // Hide the launch notification banner
+    const notifEl = document.getElementById("launchNotify");
+    if (notifEl) notifEl.classList.add("hide");
+  }
+  
+  // Pre-launch countdown display
+  function updatePreLaunchCountdown() {
+    if (isLaunched) return;
+    const now = Date.now();
+    const remaining = launchTimestamp - now;
+    if (remaining <= 0) {
+      startNormalRelease();
+      return;
+    }
+    const totalSec = Math.floor(remaining / 1000);
+    const days = Math.floor(totalSec / 86400);
+    const hours = Math.floor((totalSec % 86400) / 3600);
+    const mins = Math.floor((totalSec % 3600) / 60);
+    const secs = totalSec % 60;
+    const countdownStr = `${days}d ${hours.toString().padStart(2,'0')}h ${mins.toString().padStart(2,'0')}m ${secs.toString().padStart(2,'0')}s`;
+    const countdownDisplay = document.getElementById("countdownDisplay");
+    if (countdownDisplay) countdownDisplay.innerText = countdownStr;
+    
+    // update admin message with countdown
+    if (adminInnerDiv && !isLaunched) {
+      adminInnerDiv.innerHTML = `⏳ PROJECT109T LAUNCHES IN:<br>${countdownStr}<br>Token supply frozen until then.`;
+    }
+  }
+  
+  // Typing init line
+  function typeLine(el, text, speed = 30) {
+    el.innerHTML = "";
+    let i = 0;
+    function t() {
+      if (i < text.length) {
+        el.innerHTML += text[i];
+        i++;
+        setTimeout(t, speed);
+      }
+    }
+    t();
+  }
+  typeLine(initLine, "Project109T pre-launch mode active. Countdown to Day 1...");
+  
+  // Set pre-launch display values
+  supplySpan.innerText = "0 / 109 tokens";
+  counterDiv.innerText = "Day 0 / 109";
+  clockDiv.innerText = "Next Token In: 00:00:00";
+  
+  // Start countdown timer
+  const countdownTimer = setInterval(updatePreLaunchCountdown, 1000);
+  updatePreLaunchCountdown();
+  
+  // Wallet connect (unchanged)
+  document.getElementById("connectWallet").onclick = async () => {
+    if (window.solana && window.solana.isPhantom) {
+      const res = await window.solana.connect();
+      document.getElementById("connectWallet").innerText = `[ ${res.publicKey.toString().slice(0,4)}...connected ]`;
+    } else {
+      alert("Install Phantom Wallet");
+    }
+  };
+  
+  // Manual close for notification banner
+  const closeNotifBtn = document.getElementById("closeNotifyBtn");
+  if (closeNotifBtn) {
+    closeNotifBtn.addEventListener("click", () => {
+      const notif = document.getElementById("launchNotify");
+      if (notif) notif.classList.add("hide");
+    });
+  }
 </script>
 
 </body>
